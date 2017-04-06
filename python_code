@@ -1,0 +1,71 @@
+bases_1 = ['A','C','G','T']
+k = 12
+
+from itertools import product # itertools compute cartesian product od input iterable
+                                # nested for-loops
+kmer_1 = [''.join(p) for p in product(bases_1, repeat=k)]
+#print(kmer_1[0:10])
+#print(len(kmer_1))
+
+coordinate = []
+x = []
+y = []
+
+n = 12
+while n >= 1: # coordinate -> A(0,0) T(1,1) G(1,0) C(0,1)
+              # place valuein tha binary system
+    for seq in kmer_1[0:10]:
+        n = 12
+        for nuc in seq:
+            n -= 1
+            if 'A' == nuc:
+                x.append(int(0))
+                y.append(int(0))
+                continue
+            if 'G' == nuc:
+                x.append(2**(int(n)))
+                y.append(int(0))
+                continue
+            if 'C' == nuc:
+                x.append(int(0))
+                y.append(2**(int(n)))
+                continue
+            if 'T' == nuc:
+                x.append(2**(int(n)))
+                y.append(2**(int(n)))
+                continue
+        coordinate.append((sum(x), sum(y)))
+        del(x[:])
+        del(y[:])
+
+#print(coordinate)
+
+from PIL import Image
+kmer = Image.open('12mer-scale-corrected.png')
+
+pixels = kmer.load()
+width, height = kmer.size
+
+all_pixels = []
+w_h = []
+for w in range(width):
+    for h in range(height):
+        cpixel = pixels[w, h]
+        all_pixels.append(cpixel)
+        w_h.append([w,h])
+        #print(w, h, cpixel)
+
+#print(w_h[0:10])
+#print(all_pixels[0:10])
+#print(len(all_pixels))
+
+repeat = []
+
+for pix in all_pixels:
+    r = int(pix[0])*256*256
+    g = int(pix[1])*256
+    b = int(pix[2])
+    repeat.append(int(r) + int(g) + int(b))
+
+#print(repeat[0:10])
+#print(len(repeat))

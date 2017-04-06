@@ -1,0 +1,19 @@
+from PIL import Image
+
+kmer = Image.open('12mer-scale-corrected.png')
+
+pixels = kmer.load()
+width, height = kmer.size
+
+all_pixels = []
+w_h = []
+for w in range(width):
+    for h in range(height):
+        cpixel = pixels[w, h]
+        all_pixels.append(cpixel)
+        w_h.append([w,h])
+        #print(w, h, cpixel)
+
+im = Image.new('RGB', (4096, 4096))
+im.putdata(all_pixels)
+im.save('same.png')
